@@ -1,0 +1,30 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>url shortener</title>
+    </head>
+    <body>
+        <div class="container">
+            <h1>URL Shortener</h1>
+            <form id="url-form" method="post" action="/create">
+                <input type="text" id="url-input" name="originalURL" placeholder="Enter URL" required>
+            <button type="submit">Shorten</button>
+        </form>
+        <div id="shortened-url" style="display: {{ display }};">
+            <a id="shortened-url-text" href="http://127.0.0.1:8000/{{ shortened }}"> http://127.0.0.1:8000/{{ shortened }}</a>
+            <button id="copy-button">Copy</button>
+        </div>
+        <script>
+            document.getElementById('copy-button').addEventListener('click', function() {
+                const shortenedUrl = document.getElementById('shortened-url-text').href;
+                navigator.clipboard.writeText(shortenedUrl).then(() => {
+                    alert('URL copied to clipboard!');
+                }).catch(err => {
+                    console.error('Failed to copy URL: ', err);
+                });
+            });
+        </script>
+
+
+</html>
