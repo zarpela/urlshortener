@@ -9,7 +9,7 @@ import mysql.connector as mysql
 banco = mysql.connect(
     host="localhost",
     user="root",
-    password="zarpela123",
+    password="YOUR_PASSWORD",
     database="URLShortener"
 )
 cursor = banco.cursor()
@@ -36,7 +36,7 @@ async def convertLongToShort(request: Request, originalURL: str = Form(...)):
 
     return templates.TemplateResponse(
         "index.html",
-        {"request": request, "shortened": shortId, "display": display}  
+        {"request": request, "shortened": shortId, "display": display}
     )
 
 @app.get("/{shortURL}", response_class=RedirectResponse, status_code=302)
@@ -50,4 +50,4 @@ def getLongURL(shortURL: str):
         return RedirectResponse(url=original)
     else:
         return RedirectResponse(url="/")
-    
+
