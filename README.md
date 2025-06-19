@@ -1,4 +1,13 @@
-## How to run URL shortener
+## URL Shortener
+
+### Prerequisites:
+1. mysql
+2. python
+3. fastapi
+4. mysql.connector python library
+
+### How to run URL shortener
+
 ### Step 1: set MySQL password
 To run this project, you need to set the database password on the `main.py` file. Follow the following steps to set it.
 
