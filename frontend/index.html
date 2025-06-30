@@ -1,30 +1,59 @@
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>url shortener</title>
-    </head>
-    <body>
-        <div class="container">
-            <h1>URL Shortener</h1>
-            <form id="url-form" method="post" action="/create">
-                <input type="text" id="url-input" name="originalURL" placeholder="Enter URL" required>
-            <button type="submit">Shorten</button>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>URL Shortener</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="bg-white shadow-lg rounded-xl p-8 w-full max-w-md text-center">
+        <h1 class="text-2xl font-bold text-gray-800 mb-6">🔗 URL Shortener</h1>
+
+        <form id="url-form" method="post" action="/create" class="flex flex-col gap-4">
+            <input 
+                type="text" 
+                id="url-input" 
+                name="originalURL" 
+                placeholder="Enter a long URL"
+                required
+                class="p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+            <button 
+                type="submit"
+                class="bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
+            >
+                Shorten
+            </button>
         </form>
-        <div id="shortened-url" style="display: {{ display }};">
-            <a id="shortened-url-text" href="http://127.0.0.1:8000/{{ shortened }}"> http://127.0.0.1:8000/{{ shortened }}</a>
-            <button id="copy-button">Copy</button>
+
+        <div id="shortened-url" style="display: {{ display }};" class="mt-6">
+            <a 
+                id="shortened-url-text" 
+                href="http://127.0.0.1:8000/{{ shortened }}" 
+                target="_blank"
+                class="text-blue-600 font-semibold hover:underline"
+            >
+                http://127.0.0.1:8000/{{ shortened }}
+            </a>
+            <button 
+                id="copy-button" 
+                class="mt-2 bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-1 rounded"
+            >
+                Copy
+            </button>
         </div>
-        <script>
-            document.getElementById('copy-button').addEventListener('click', function() {
-                const shortenedUrl = document.getElementById('shortened-url-text').href;
-                navigator.clipboard.writeText(shortenedUrl).then(() => {
-                    alert('URL copied to clipboard!');
-                }).catch(err => {
-                    console.error('Failed to copy URL: ', err);
-                });
+    </div>
+
+    <script>
+        document.getElementById('copy-button')?.addEventListener('click', function () {
+            const shortenedUrl = document.getElementById('shortened-url-text').href;
+            navigator.clipboard.writeText(shortenedUrl).then(() => {
+                alert('✅ URL copied to clipboard!');
+            }).catch(err => {
+                console.error('❌ Failed to copy URL: ', err);
             });
-        </script>
-
-
+        });
+    </script>
+</body>
 </html>

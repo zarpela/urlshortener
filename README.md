@@ -1,35 +1,34 @@
-## URL Shortener
+# 🔗 URL Shortener
 
-### Prerequisites:
-1. mysql
-2. python
-3. fastapi
-4. mysql.connector python library
+a simple url shortener
 
-### How to run URL shortener
+---
 
-### Step 1: set MySQL password
-To run this project, you need to set the database password on the `main.py` file. Follow the following steps to set it.
+## installation
 
-1. Open the `main.py` file in your code editor
-2. Find go to line 12  and set your MySQL database password. Example:
+1. **Clone this repository**
 
-   ```python
-   banco = mysql.connect(
-    host="localhost",
-    user="root",
-    password="YOUR_PASSWORD",
-    database="URLShortener"
-    )
+```bash
+git clone https://github.com/zarpela/url-shortener.git
+cd url-shortener
+```
 
-### Step 2: run the SQL query to create the database
-To make the data persist, the shortened urls are stored in the table created in the `sql.sql` file. To create the database run the following command:
+2. **Install dependencies**
 
-  `mysql -u root -p < "sql.sql"`
+```bash
+pip install -r requirements.txt
+```
+## running the project
 
-### Step 3: run the project
-To run the project, execute the following command:
+to run the server you need to run the following command: 
+```bash
+uvicorn main:app --reload
+```
+and then you can access the app on 
 
-  `fastapi dev main.py`
-      
-And then open the ip showed at '   server   Server started at http://x.x.x.x:xxxx' on your browser of choice
+```txt
+http://127.0.0.1:8000
+```
+
+---
+i used mainly fastapi and sqlite3 to make this project, feel free to mess around with it

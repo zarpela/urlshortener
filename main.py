@@ -4,15 +4,20 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 import shortid as id
-import mysql.connector as mysql
+import sqlite3 as sql
 
-banco = mysql.connect(
-    host="localhost",
-    user="root",
-    password="YOUR_PASSWORD",
-    database="URLShortener"
-)
-cursor = banco.cursor()
+# criar o banco de dados quando comecar
+with sql.connect("urls.db") as conexao:
+    cursor = conexao.cursor()
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS url (
+            originalURL TEXT NOT NULL,
+            shortID CHAR(8) NOT NULL UNIQUE
+        )
+    """)
+    conexao.commit()
+
+
 app = FastAPI()
 app.mount("/frontend", StaticFiles(directory="frontend"), name="frontend")
 templates = Jinja2Templates(directory="frontend")
@@ -27,10 +32,22 @@ async def home(request: Request, shortened: str = None, display: str = "none"):
 
 @app.post("/create")
 async def convertLongToShort(request: Request, originalURL: str = Form(...)):
-    shortId = id.ShortId().generate()
-    cursor.execute(f"insert into url values ('{originalURL}', '{shortId}')")
-    banco.commit()
 
+    exists = True
+    while exists:
+        shortId = id.ShortId().generate() #gerando um novo código
+        with sql.connect("urls.db") as conexao:
+            cursor = conexao.cursor()
+            cursor.execute("SELECT shortID FROM url WHERE shortID = ?", (shortId,))
+            resultado = cursor.fetchone()
+            if not resultado:
+                exists = False
+
+
+    with sql.connect("urls.db") as conexao:
+        cursor = conexao.cursor()
+        cursor.execute("INSERT INTO url (originalURL, shortID) VALUES (?, ?)", (originalURL, shortId))
+        conexao.commit()
     shortURL = f"/{shortId}"
     display = "block"
 
@@ -41,8 +58,12 @@ async def convertLongToShort(request: Request, originalURL: str = Form(...)):
 
 @app.get("/{shortURL}", response_class=RedirectResponse, status_code=302)
 def getLongURL(shortURL: str):
-    cursor.execute(f"select originalURL from url where shortID = '{shortURL}'")
-    resultado = cursor.fetchone()
+    with sql.connect("urls.db") as conexao:
+        cursor = conexao.cursor()
+        cursor.execute("SELECT originalURL FROM url WHERE shortID = ?", (shortURL,))
+        resultado = cursor.fetchone()
+
+
     if resultado and resultado[0]:
         original = resultado[0]
         if not original.startswith(("http://", "https://")):
