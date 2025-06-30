@@ -9,8 +9,8 @@ a simple url shortener
 1. **Clone this repository**
 
 ```bash
-git clone https://github.com/zarpela/url-shortener.git
-cd url-shortener
+git clone https://github.com/zarpela/urlshortener.git
+cd urlshortener
 ```
 
 2. **Install dependencies**
